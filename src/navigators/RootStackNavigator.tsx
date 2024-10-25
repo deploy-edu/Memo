@@ -55,12 +55,25 @@ export default function RootStackNavigator() {
       }}
     >
       {isLoggedIn ? (
-        <Stack.Screen name="MainTab" component={MainTabNavigator} />
+        <Stack.Screen
+          name="MainTab"
+          component={MainTabNavigator}
+          options={{
+            headerTitle: "홈",
+          }}
+        />
       ) : (
         <Stack.Screen name="Login" component={LoginScreen} />
       )}
       <Stack.Screen name="SignUp" component={SignUpScreen} />
-      <Stack.Screen name="AddMemo" component={AddMemoScreen} />
+      <Stack.Screen
+        name="AddMemo"
+        component={AddMemoScreen}
+        options={{
+          headerShown: true,
+          headerTitle: "메모 추가",
+        }}
+      />
     </Stack.Navigator>
   );
 }
