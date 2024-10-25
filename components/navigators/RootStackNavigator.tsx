@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { useState } from "react";
 import LoginScreen from "../screens/LoginScreen";
 import SignUpScreen from "../screens/SignUpScreen";
+import { useAuthStore } from "../stores/useAuthStore";
 import MainTabNavigator from "./MainTabNavigator";
 
 type RootStackParamList = {
@@ -13,7 +13,7 @@ type RootStackParamList = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function RootStackNavigator() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
 
   return (
     <Stack.Navigator
