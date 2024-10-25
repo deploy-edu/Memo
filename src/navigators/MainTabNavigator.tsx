@@ -4,7 +4,7 @@ import HomeScreen from "../screens/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import SettingScreen from "../screens/SettingScreen";
 
-type MainTabNavigatorParamList = {
+export type MainTabNavigatorParamList = {
   Profile: undefined;
   Home: undefined;
   Setting: undefined;
