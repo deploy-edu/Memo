@@ -1,9 +1,11 @@
 import styled from "@emotion/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { FC, useCallback } from "react";
+import { Alert } from "react-native";
 import Input from "../components/Input";
 import LoginButton from "../components/LoginButton";
 import SignUpButton from "../components/SignUpButton";
+import { supabase } from "../libs/supabase";
 import { RootStackParamList } from "../navigators/RootStackNavigator";
 import { useAuthStore } from "../stores/useAuthStore";
 
@@ -25,6 +27,27 @@ const LoginScreen: FC<Props> = ({ navigation }) => {
     navigation.navigate("SignUp");
   }, []);
 
+  const onLogin = useCallback(async () => {
+    const {
+      error,
+      data: { session },
+    } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (error) {
+      Alert.alert(error.message);
+    }
+
+    if (!session) {
+      Alert.alert("세션 정보가 없습니다.");
+      return;
+    }
+
+    useAuthStore.getState().login(session);
+  }, []);
+
   return (
     <Container>
       <Input
@@ -42,11 +65,7 @@ const LoginScreen: FC<Props> = ({ navigation }) => {
           setPassword(text);
         }}
       />
-      <LoginButton
-        onPress={() => {
-          useAuthStore.getState().login();
-        }}
-      />
+      <LoginButton onPress={onLogin} />
       <SignUpButton onPress={onSignUp} />
     </Container>
   );
