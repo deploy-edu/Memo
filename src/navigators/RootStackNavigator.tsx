@@ -4,7 +4,7 @@ import SignUpScreen from "../screens/SignUpScreen";
 import { useAuthStore } from "../stores/useAuthStore";
 import MainTabNavigator from "./MainTabNavigator";
 
-type RootStackParamList = {
+export type RootStackParamList = {
   MainTab: undefined;
   Login: undefined;
   SignUp: undefined;

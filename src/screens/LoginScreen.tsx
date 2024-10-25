@@ -1,8 +1,10 @@
 import styled from "@emotion/native";
+import { StackScreenProps } from "@react-navigation/stack";
 import React, { FC } from "react";
 import CommonText from "../components/CommonText";
 import Input from "../components/Input";
 import LoginButton from "../components/LoginButton";
+import { RootStackParamList } from "../navigators/RootStackNavigator";
 import { useAuthStore } from "../stores/useAuthStore";
 
 const Container = styled.View`
@@ -27,7 +29,9 @@ const SignUpButtonText = styled(CommonText)`
   font-weight: bold;
 `;
 
-const LoginScreen: FC = ({ navigation }) => {
+type Props = StackScreenProps<RootStackParamList, "Login">;
+
+const LoginScreen: FC<Props> = ({ navigation }) => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
