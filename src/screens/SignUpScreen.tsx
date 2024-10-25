@@ -2,9 +2,11 @@ import styled from "@emotion/native";
 import Icon from "@expo/vector-icons/AntDesign";
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { FC, useCallback } from "react";
+import { Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Input from "../components/Input";
 import SignUpButton from "../components/SignUpButton";
+import { supabase } from "../libs/supabase";
 import { RootStackParamList } from "../navigators/RootStackNavigator";
 
 const Container = styled.View`
@@ -39,7 +41,32 @@ const SignUpScreen: FC<Props> = ({ navigation }) => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const onSignUp = useCallback(() => {}, [email, password]);
+  const onSignUp = useCallback(async () => {
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    });
+
+    console.log(session, error);
+
+    if (error) {
+      Alert.alert(error.message);
+      return;
+    }
+
+    if (!session) {
+      Alert.alert("세션 정보가 없습니다.");
+      return;
+    }
+
+    Alert.alert("회원가입에 성공했습니다.");
+
+    navigation.goBack();
+  }, [email, password]);
+
   const onClose = useCallback(() => {
     navigation.goBack();
   }, []);
