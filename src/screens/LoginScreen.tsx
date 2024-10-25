@@ -1,9 +1,9 @@
 import styled from "@emotion/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { FC, useCallback } from "react";
-import CommonText from "../components/CommonText";
 import Input from "../components/Input";
 import LoginButton from "../components/LoginButton";
+import SignUpButton from "../components/SignUpButton";
 import { RootStackParamList } from "../navigators/RootStackNavigator";
 import { useAuthStore } from "../stores/useAuthStore";
 
@@ -13,20 +13,6 @@ const Container = styled.View`
   padding: 20px;
   background-color: #fff;
   gap: 20px;
-`;
-
-const SignUpButton = styled.TouchableOpacity`
-  width: 100%;
-  padding: 20px;
-  border-radius: 5px;
-  align-items: center;
-  border: 1px solid skyblue;
-`;
-
-const SignUpButtonText = styled(CommonText)`
-  color: skyblue;
-  font-size: 16px;
-  font-weight: bold;
 `;
 
 type Props = StackScreenProps<RootStackParamList, "Login">;
@@ -61,9 +47,7 @@ const LoginScreen: FC<Props> = ({ navigation }) => {
           useAuthStore.getState().login();
         }}
       />
-      <SignUpButton onPress={onSignUp}>
-        <SignUpButtonText>회원가입</SignUpButtonText>
-      </SignUpButton>
+      <SignUpButton onPress={onSignUp} />
     </Container>
   );
 };
