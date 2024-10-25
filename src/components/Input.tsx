@@ -16,8 +16,8 @@ const StyledInput = styled.TextInput`
 
 const Input: FC<Props> = ({ style, ...props }) => {
   return (
-    <Container style={style}>
-      <StyledInput {...props} />
+    <Container>
+      <StyledInput style={style} {...props} />
     </Container>
   );
 };
