@@ -1,8 +1,11 @@
 import styled from "@emotion/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import React, { FC, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { FC, useCallback, useState } from "react";
+import { Alert } from "react-native";
 import CommonText from "../components/CommonText";
 import Input from "../components/Input";
+import { supabase } from "../libs/supabase";
 import { useAuthStore } from "../stores/useAuthStore";
 
 const Container = styled.View`
@@ -37,6 +40,43 @@ const ProfileScreen: FC = () => {
   const [birth, setBirth] = useState<Date | null>();
   const [username, setUsername] = useState<string>("");
   const session = useAuthStore((state) => state.session);
+
+  useFocusEffect(
+    useCallback(() => {
+      async function init() {
+        try {
+          setLoading(true);
+          if (!session?.user) throw new Error("No user on the session!");
+
+          setEmail(session.user.email!);
+
+          const { data, error, status } = await supabase
+            .from("Profile")
+            .select(`id, username, avatar_url, birth`)
+            .eq("id", session.user.id)
+            .single();
+
+          if (error && status !== 406) {
+            throw error;
+          }
+
+          if (data) {
+            setUsername(data.username);
+            setAvatarUrl(data.avatar_url);
+            setBirth(data.birth);
+          }
+        } catch (error) {
+          if (error instanceof Error) {
+            Alert.alert(error.message);
+          }
+        } finally {
+          setLoading(false);
+        }
+      }
+
+      init();
+    }, [])
+  );
 
   return (
     <Container>
