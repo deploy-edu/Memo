@@ -11,12 +11,12 @@ const Container = styled.View`;
     
 `;
 
-const AddMemoScren: FC<Props> = ({ style }) => {
+const AddMemoScreen: FC<Props> = ({ style }) => {
   return (
     <Container style={style}>
-      <CommonText>AddMemoScren</CommonText>
+      <CommonText>AddMemoScreen</CommonText>
     </Container>
   );
 };
 
-export default AddMemoScren;
+export default AddMemoScreen;
