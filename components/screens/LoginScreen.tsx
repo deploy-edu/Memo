@@ -1,6 +1,7 @@
 import styled from "@emotion/native";
 import React, { FC } from "react";
-import CommonText from "../components/CommonText";
+import LoginButton from "../components/LoginButton";
+import { useAuthStore } from "../stores/useAuthStore";
 
 const Container = styled.View`
   flex: 1;
@@ -11,7 +12,11 @@ const Container = styled.View`
 const LoginScreen: FC = () => {
   return (
     <Container>
-      <CommonText>LoginScreen</CommonText>
+      <LoginButton
+        onPress={() => {
+          useAuthStore.getState().login();
+        }}
+      />
     </Container>
   );
 };
