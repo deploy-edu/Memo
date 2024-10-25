@@ -32,6 +32,8 @@ const ContentInput = styled(Input)`
 
 const AddMemoScreen: FC<Props> = ({ style }) => {
   const { keyboardHeight } = useKeyboardHeight();
+  const [title, setTitle] = React.useState<string>("");
+  const [content, setContent] = React.useState<string>("");
 
   return (
     <Container
@@ -42,9 +44,22 @@ const AddMemoScreen: FC<Props> = ({ style }) => {
         },
       ]}
     >
-      <TitleInput placeholder="제목을 입력하세요" />
+      <TitleInput
+        placeholder="제목을 입력하세요"
+        value={title}
+        onChangeText={(text) => {
+          setTitle(text);
+        }}
+      />
       <ContentContainer>
-        <ContentInput placeholder="내용을 입력하세요" multiline />
+        <ContentInput
+          placeholder="내용을 입력하세요"
+          multiline
+          value={content}
+          onChangeText={(text) => {
+            setContent(text);
+          }}
+        />
       </ContentContainer>
       <Button title="저장" />
     </Container>
