@@ -9,15 +9,23 @@ type Props = {
 };
 
 const Container = styled.Pressable`
-  padding: 10px;
-  background-color: #f1f1f1;
+  padding: 20px;
+  background-color: #333;
   border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Title = styled(CommonText)`
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
 `;
 
 const LoginButton: FC<Props> = ({ style, onPress }) => {
   return (
     <Container style={style} onPress={onPress}>
-      <CommonText>LoginButton</CommonText>
+      <Title>로그인</Title>
     </Container>
   );
 };
