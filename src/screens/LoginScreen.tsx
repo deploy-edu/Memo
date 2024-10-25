@@ -27,7 +27,7 @@ const SignUpButtonText = styled(CommonText)`
   font-weight: bold;
 `;
 
-const LoginScreen: FC = () => {
+const LoginScreen: FC = ({ navigation }) => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
