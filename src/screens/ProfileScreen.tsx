@@ -1,4 +1,5 @@
 import styled from "@emotion/native";
+import Icon from "@expo/vector-icons/AntDesign";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useFocusEffect } from "@react-navigation/native";
 import React, { FC, useCallback, useState } from "react";
@@ -31,6 +32,16 @@ const ItemContainer = styled.View`
 const StyledInput = styled(Input)`
   font-size: 20px;
   border-width: 1px;
+`;
+
+const IconContainer = styled.View`
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  border: 1px solid skyblue;
 `;
 
 const ProfileScreen: FC = () => {
@@ -80,6 +91,9 @@ const ProfileScreen: FC = () => {
 
   return (
     <Container>
+      <IconContainer>
+        <Icon name="user" size={50} color="skyblue" />
+      </IconContainer>
       <ItemContainer>
         <Title>email</Title>
         <Value>{email}</Value>
