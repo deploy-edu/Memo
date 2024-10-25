@@ -9,7 +9,11 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 export default function RootStackNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Stack.Screen name="MainTab" component={MainTabNavigator} />
     </Stack.Navigator>
   );
