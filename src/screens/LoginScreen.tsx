@@ -1,16 +1,30 @@
 import styled from "@emotion/native";
 import React, { FC } from "react";
+import CommonText from "../components/CommonText";
 import Input from "../components/Input";
 import LoginButton from "../components/LoginButton";
 import { useAuthStore } from "../stores/useAuthStore";
 
 const Container = styled.View`
   flex: 1;
-  align-items: center;
   justify-content: center;
   padding: 20px;
   background-color: #fff;
   gap: 20px;
+`;
+
+const SignUpButton = styled.TouchableOpacity`
+  width: 100%;
+  padding: 20px;
+  border-radius: 5px;
+  align-items: center;
+  border: 1px solid skyblue;
+`;
+
+const SignUpButtonText = styled(CommonText)`
+  color: skyblue;
+  font-size: 16px;
+  font-weight: bold;
 `;
 
 const LoginScreen: FC = () => {
@@ -39,6 +53,9 @@ const LoginScreen: FC = () => {
           useAuthStore.getState().login();
         }}
       />
+      <SignUpButton>
+        <SignUpButtonText>회원가입</SignUpButtonText>
+      </SignUpButton>
     </Container>
   );
 };
