@@ -14,6 +14,9 @@ const Container = styled.Pressable`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  padding: 15px;
+  border-width: 1px;
+  border-radius: 5px;
 `;
 
 const Title = styled(CommonText)`
