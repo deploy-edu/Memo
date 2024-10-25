@@ -56,7 +56,29 @@ const ProfileScreen: FC = () => {
   const [username, setUsername] = useState<string>("");
   const session = useAuthStore((state) => state.session);
 
-  const onSave = useCallback(async () => {}, []);
+  const onSave = useCallback(async () => {
+    try {
+      if (!session?.user) throw new Error("No user on the session!");
+
+      const { error } = await supabase.from("Profile").upsert({
+        id: session.user.id,
+        username,
+        avatar_url: avatarUrl,
+        birth,
+      });
+
+      if (error) {
+        console.log(error);
+        throw error;
+      }
+
+      Alert.alert("저장되었습니다.");
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert(error.message);
+      }
+    }
+  }, [avatarUrl, birth, session?.user, username]);
 
   useFocusEffect(
     useCallback(() => {
@@ -95,6 +117,8 @@ const ProfileScreen: FC = () => {
     }, [])
   );
 
+  console.log("birth", birth);
+
   return (
     <Container>
       <InnerContainer>
@@ -124,7 +148,7 @@ const ProfileScreen: FC = () => {
             }}
             display="spinner"
             mode="date"
-            value={birth || new Date()}
+            value={birth ? new Date(birth) : new Date()}
             onChange={(event, date) => {
               if (event.type === "set") {
                 setBirth(date);
