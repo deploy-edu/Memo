@@ -1,8 +1,13 @@
 import styled from "@emotion/native";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import React, { FC } from "react";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import { CompositeScreenProps } from "@react-navigation/native";
+import { StackScreenProps } from "@react-navigation/stack";
+import React, { FC, useCallback } from "react";
 import { FlatList } from "react-native";
 import MemoListItem from "../components/MemoListItem";
+import { MainTabNavigatorParamList } from "../navigators/MainTabNavigator";
+import { RootStackParamList } from "../navigators/RootStackNavigator";
 
 const Container = styled.View`
   flex: 1;
@@ -20,12 +25,21 @@ const AddButton = styled.Pressable`
   margin-bottom: 20px;
 `;
 
-const HomeScreen: FC = () => {
+type Props = CompositeScreenProps<
+  BottomTabScreenProps<MainTabNavigatorParamList, "Home">,
+  StackScreenProps<RootStackParamList, "MainTab">
+>;
+
+const HomeScreen: FC<Props> = ({ navigation }) => {
+  const onAdd = useCallback(() => {
+    navigation.navigate("AddMemo");
+  }, []);
+
   return (
     <Container>
       <FlatList
         ListHeaderComponent={
-          <AddButton>
+          <AddButton onPress={onAdd}>
             <Icon name="pencil" size={30} />
           </AddButton>
         }
