@@ -46,7 +46,7 @@ const LoginScreen: FC<Props> = ({ navigation }) => {
     }
 
     useAuthStore.getState().login(session);
-  }, []);
+  }, [email, password]);
 
   return (
     <Container>
