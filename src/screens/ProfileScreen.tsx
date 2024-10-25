@@ -4,14 +4,18 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useFocusEffect } from "@react-navigation/native";
 import React, { FC, useCallback, useState } from "react";
 import { Alert } from "react-native";
+import Button from "../components/Button";
 import CommonText from "../components/CommonText";
 import Input from "../components/Input";
 import { supabase } from "../libs/supabase";
 import { useAuthStore } from "../stores/useAuthStore";
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   flex: 1;
   padding: 20px;
+`;
+
+const InnerContainer = styled.View`
   gap: 20px;
 `;
 
@@ -52,6 +56,8 @@ const ProfileScreen: FC = () => {
   const [username, setUsername] = useState<string>("");
   const session = useAuthStore((state) => state.session);
 
+  const onSave = useCallback(async () => {}, []);
+
   useFocusEffect(
     useCallback(() => {
       async function init() {
@@ -91,40 +97,43 @@ const ProfileScreen: FC = () => {
 
   return (
     <Container>
-      <IconContainer>
-        <Icon name="user" size={50} color="skyblue" />
-      </IconContainer>
-      <ItemContainer>
-        <Title>email</Title>
-        <Value>{email}</Value>
-      </ItemContainer>
-      <ItemContainer>
-        <Title>이름</Title>
-        <StyledInput
-          placeholder="이름을 입력하세요.."
-          value={username}
-          onChangeText={(text) => {
-            setUsername(text);
-          }}
-        />
-      </ItemContainer>
-      <ItemContainer>
-        <Title>생년월일</Title>
-        <DateTimePicker
-          style={{
-            borderWidth: 1,
-            borderRadius: 5,
-          }}
-          display="spinner"
-          mode="date"
-          value={birth || new Date()}
-          onChange={(event, date) => {
-            if (event.type === "set") {
-              setBirth(date);
-            }
-          }}
-        />
-      </ItemContainer>
+      <InnerContainer>
+        <IconContainer>
+          <Icon name="user" size={50} color="skyblue" />
+        </IconContainer>
+        <ItemContainer>
+          <Title>email</Title>
+          <Value>{email}</Value>
+        </ItemContainer>
+        <ItemContainer>
+          <Title>이름</Title>
+          <StyledInput
+            placeholder="이름을 입력하세요.."
+            value={username}
+            onChangeText={(text) => {
+              setUsername(text);
+            }}
+          />
+        </ItemContainer>
+        <ItemContainer>
+          <Title>생년월일</Title>
+          <DateTimePicker
+            style={{
+              borderWidth: 1,
+              borderRadius: 5,
+            }}
+            display="spinner"
+            mode="date"
+            value={birth || new Date()}
+            onChange={(event, date) => {
+              if (event.type === "set") {
+                setBirth(date);
+              }
+            }}
+          />
+        </ItemContainer>
+        <Button title="저장" onPress={onSave} />
+      </InnerContainer>
     </Container>
   );
 };
