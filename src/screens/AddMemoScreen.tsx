@@ -1,8 +1,9 @@
 import styled from "@emotion/native";
-import React, { FC, useEffect } from "react";
-import { Keyboard, ViewStyle } from "react-native";
+import React, { FC } from "react";
+import { ViewStyle } from "react-native";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import useKeyboardHeight from "../hooks/useKeyboardHeight";
 
 type Props = {
   style?: ViewStyle;
@@ -30,20 +31,7 @@ const ContentInput = styled(Input)`
 `;
 
 const AddMemoScreen: FC<Props> = ({ style }) => {
-  const [keyboardHeight, setKeyboardHeight] = React.useState<number>(0);
-
-  useEffect(() => {
-    const showSubscription = Keyboard.addListener("keyboardDidShow", (e) =>
-      setKeyboardHeight(e.endCoordinates.height)
-    );
-    const hideSubscription = Keyboard.addListener("keyboardWillHide", () =>
-      setKeyboardHeight(0)
-    );
-    return () => {
-      showSubscription.remove();
-      hideSubscription.remove();
-    };
-  }, []);
+  const { keyboardHeight } = useKeyboardHeight();
 
   return (
     <Container
