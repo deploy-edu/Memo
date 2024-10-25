@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { useEffect } from "react";
 import { AppState } from "react-native";
 import { supabase } from "../libs/supabase";
+import AddMemoScreen from "../screens/AddMemoScreen";
 import LoginScreen from "../screens/LoginScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import { useAuthStore } from "../stores/useAuthStore";
@@ -11,6 +12,7 @@ export type RootStackParamList = {
   MainTab: undefined;
   Login: undefined;
   SignUp: undefined;
+  AddMemo: undefined;
 };
 
 AppState.addEventListener("change", (state) => {
@@ -58,6 +60,7 @@ export default function RootStackNavigator() {
         <Stack.Screen name="Login" component={LoginScreen} />
       )}
       <Stack.Screen name="SignUp" component={SignUpScreen} />
+      <Stack.Screen name="AddMemo" component={AddMemoScreen} />
     </Stack.Navigator>
   );
 }
