@@ -1,6 +1,7 @@
 import styled from "@emotion/native";
 import React, { FC, useCallback } from "react";
 import SettingListItem from "../components/SettingListItem";
+import { supabase } from "../libs/supabase";
 import { useAuthStore } from "../stores/useAuthStore";
 
 const Container = styled.View`
@@ -11,7 +12,8 @@ const Container = styled.View`
 `;
 
 const SettingScreen: FC = () => {
-  const onLogout = useCallback(() => {
+  const onLogout = useCallback(async () => {
+    await supabase.auth.signOut();
     useAuthStore.getState().logout();
   }, []);
 
