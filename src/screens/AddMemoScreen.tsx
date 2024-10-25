@@ -1,6 +1,6 @@
 import styled from "@emotion/native";
-import React, { FC } from "react";
-import { ViewStyle } from "react-native";
+import React, { FC, useEffect } from "react";
+import { Keyboard, ViewStyle } from "react-native";
 import Button from "../components/Button";
 import Input from "../components/Input";
 
@@ -30,8 +30,30 @@ const ContentInput = styled(Input)`
 `;
 
 const AddMemoScreen: FC<Props> = ({ style }) => {
+  const [keyboardHeight, setKeyboardHeight] = React.useState<number>(0);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", (e) =>
+      setKeyboardHeight(e.endCoordinates.height)
+    );
+    const hideSubscription = Keyboard.addListener("keyboardWillHide", () =>
+      setKeyboardHeight(0)
+    );
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
   return (
-    <Container style={style}>
+    <Container
+      style={[
+        style,
+        {
+          paddingBottom: keyboardHeight,
+        },
+      ]}
+    >
       <TitleInput placeholder="제목을 입력하세요" />
       <ContentContainer>
         <ContentInput placeholder="내용을 입력하세요" multiline />
