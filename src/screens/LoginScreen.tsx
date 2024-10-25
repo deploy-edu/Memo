@@ -1,6 +1,6 @@
 import styled from "@emotion/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 import CommonText from "../components/CommonText";
 import Input from "../components/Input";
 import LoginButton from "../components/LoginButton";
@@ -35,6 +35,10 @@ const LoginScreen: FC<Props> = ({ navigation }) => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
+  const onSignUp = useCallback(() => {
+    navigation.navigate("SignUp");
+  }, []);
+
   return (
     <Container>
       <Input
@@ -57,7 +61,7 @@ const LoginScreen: FC<Props> = ({ navigation }) => {
           useAuthStore.getState().login();
         }}
       />
-      <SignUpButton>
+      <SignUpButton onPress={onSignUp}>
         <SignUpButtonText>회원가입</SignUpButtonText>
       </SignUpButton>
     </Container>
