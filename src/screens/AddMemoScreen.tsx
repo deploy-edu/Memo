@@ -1,9 +1,10 @@
 import styled from "@emotion/native";
-import React, { FC } from "react";
-import { ViewStyle } from "react-native";
+import React, { FC, useCallback, useState } from "react";
+import { Alert, ViewStyle } from "react-native";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import useKeyboardHeight from "../hooks/useKeyboardHeight";
+import { supabase } from "../libs/supabase";
 
 type Props = {
   style?: ViewStyle;
@@ -32,8 +33,21 @@ const ContentInput = styled(Input)`
 
 const AddMemoScreen: FC<Props> = ({ style }) => {
   const { keyboardHeight } = useKeyboardHeight();
-  const [title, setTitle] = React.useState<string>("");
-  const [content, setContent] = React.useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+
+  const onSave = useCallback(async () => {
+    const { error, data } = await supabase
+      .from("Memo")
+      .insert([{ title, content }]);
+
+    if (error) {
+      Alert.alert(error.message);
+      return;
+    }
+
+    Alert.alert("저장되었습니다.");
+  }, [title, content]);
 
   return (
     <Container
@@ -61,7 +75,7 @@ const AddMemoScreen: FC<Props> = ({ style }) => {
           }}
         />
       </ContentContainer>
-      <Button title="저장" />
+      <Button title="저장" onPress={onSave} />
     </Container>
   );
 };
