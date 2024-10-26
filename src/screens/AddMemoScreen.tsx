@@ -31,10 +31,11 @@ const ContentInput = styled(Input)`
 
 type Props = StackScreenProps<RootStackParamList, "AddMemo">;
 
-const AddMemoScreen: FC<Props> = ({ navigation }) => {
+const AddMemoScreen: FC<Props> = ({ navigation, route }) => {
+  const { data: memoData } = route.params;
   const { keyboardHeight } = useKeyboardHeight();
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
+  const [title, setTitle] = useState<string>(memoData?.title || "");
+  const [content, setContent] = useState<string>(memoData?.content || "");
 
   const onSave = useCallback(async () => {
     const { error, data } = await supabase
