@@ -16,6 +16,7 @@ export type MemoStoreState = {
 
 export type MemoStoreAction = {
   fetch: () => Promise<void>;
+  fetchMore: () => Promise<void>;
 };
 
 export const useMemoStore = create<MemoStoreState & MemoStoreAction>(
@@ -44,6 +45,33 @@ export const useMemoStore = create<MemoStoreState & MemoStoreAction>(
       }
 
       set({ data, isLoading: false, lastId: data[data.length - 1].id });
+    },
+    fetchMore: async () => {
+      if (get().isLoading) {
+        return;
+      }
+
+      set({ isLoading: true });
+      const { data, error } = await supabase
+        .from("Memo")
+        .select("id, title, content, created_at")
+        .gt("id", get().lastId)
+        .limit(10);
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      if (data.length === 0) {
+        set({ isLoading: false });
+        return;
+      }
+
+      set((state) => ({
+        data: [...state.data, ...data],
+        isLoading: false,
+        lastId: data[data.length - 1].id,
+      }));
     },
   })
 );
