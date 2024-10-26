@@ -33,7 +33,7 @@ type Props = CompositeScreenProps<
 
 const HomeScreen: FC<Props> = ({ navigation }) => {
   const data = useMemoStore((state) => state.data);
-
+  const isLoading = useMemoStore((state) => state.isLoading);
   const onAdd = useCallback(() => {
     navigation.navigate("AddMemo");
   }, []);
@@ -52,6 +52,13 @@ const HomeScreen: FC<Props> = ({ navigation }) => {
         }
         data={data}
         keyExtractor={(item) => item.id.toString()}
+        refreshing={isLoading}
+        onRefresh={() => {
+          useMemoStore.getState().fetch();
+        }}
+        onEndReached={() => {
+          useMemoStore.getState().fetchMore();
+        }}
         contentContainerStyle={{
           gap: 10,
         }}
