@@ -8,7 +8,7 @@ import { FlatList } from "react-native";
 import MemoListItem from "../components/MemoListItem";
 import { MainTabNavigatorParamList } from "../navigators/MainTabNavigator";
 import { RootStackParamList } from "../navigators/RootStackNavigator";
-import { useMemoStore } from "../stores/useMemoStore";
+import { Memo, useMemoStore } from "../stores/useMemoStore";
 
 const Container = styled.View`
   flex: 1;
@@ -35,8 +35,19 @@ const HomeScreen: FC<Props> = ({ navigation }) => {
   const data = useMemoStore((state) => state.data);
   const isLoading = useMemoStore((state) => state.isLoading);
   const onAdd = useCallback(() => {
-    navigation.navigate("AddMemo");
+    navigation.navigate("AddMemo", {
+      data: undefined,
+    });
   }, []);
+
+  const onView = useCallback(
+    (item: Memo) => () => {
+      navigation.navigate("AddMemo", {
+        data: item,
+      });
+    },
+    [navigation]
+  );
 
   useEffect(() => {
     useMemoStore.getState().fetch();
@@ -62,7 +73,9 @@ const HomeScreen: FC<Props> = ({ navigation }) => {
         contentContainerStyle={{
           gap: 10,
         }}
-        renderItem={({ item }) => <MemoListItem title={item.title} />}
+        renderItem={({ item }) => (
+          <MemoListItem title={item.title} onPress={onView(item)} />
+        )}
       />
     </Container>
   );
