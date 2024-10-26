@@ -6,13 +6,16 @@ import AddMemoScreen from "../screens/AddMemoScreen";
 import LoginScreen from "../screens/LoginScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import { useAuthStore } from "../stores/useAuthStore";
+import { Memo } from "../stores/useMemoStore";
 import MainTabNavigator from "./MainTabNavigator";
 
 export type RootStackParamList = {
   MainTab: undefined;
   Login: undefined;
   SignUp: undefined;
-  AddMemo: undefined;
+  AddMemo: {
+    data?: Memo;
+  };
 };
 
 AppState.addEventListener("change", (state) => {
