@@ -1,14 +1,12 @@
 import styled from "@emotion/native";
+import { StackScreenProps } from "@react-navigation/stack";
 import React, { FC, useCallback, useState } from "react";
-import { Alert, ViewStyle } from "react-native";
+import { Alert } from "react-native";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import useKeyboardHeight from "../hooks/useKeyboardHeight";
 import { supabase } from "../libs/supabase";
-
-type Props = {
-  style?: ViewStyle;
-};
+import { RootStackParamList } from "../navigators/RootStackNavigator";
 
 const Container = styled.View`
   flex: 1;
@@ -31,7 +29,9 @@ const ContentInput = styled(Input)`
   font-size: 20px;
 `;
 
-const AddMemoScreen: FC<Props> = ({ style }) => {
+type Props = StackScreenProps<RootStackParamList, "AddMemo">;
+
+const AddMemoScreen: FC<Props> = ({ navigation }) => {
   const { keyboardHeight } = useKeyboardHeight();
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
@@ -47,12 +47,12 @@ const AddMemoScreen: FC<Props> = ({ style }) => {
     }
 
     Alert.alert("저장되었습니다.");
+    navigation.goBack();
   }, [title, content]);
 
   return (
     <Container
       style={[
-        style,
         {
           paddingBottom: keyboardHeight,
         },
