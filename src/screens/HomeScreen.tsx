@@ -3,11 +3,12 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import React, { FC, useCallback } from "react";
+import React, { FC, useCallback, useEffect } from "react";
 import { FlatList } from "react-native";
 import MemoListItem from "../components/MemoListItem";
 import { MainTabNavigatorParamList } from "../navigators/MainTabNavigator";
 import { RootStackParamList } from "../navigators/RootStackNavigator";
+import { useMemoStore } from "../stores/useMemoStore";
 
 const Container = styled.View`
   flex: 1;
@@ -31,8 +32,14 @@ type Props = CompositeScreenProps<
 >;
 
 const HomeScreen: FC<Props> = ({ navigation }) => {
+  const data = useMemoStore((state) => state.data);
+
   const onAdd = useCallback(() => {
     navigation.navigate("AddMemo");
+  }, []);
+
+  useEffect(() => {
+    useMemoStore.getState().fetch();
   }, []);
 
   return (
@@ -43,10 +50,8 @@ const HomeScreen: FC<Props> = ({ navigation }) => {
             <Icon name="pencil" size={30} />
           </AddButton>
         }
-        data={[
-          { key: "1", title: "메모1" },
-          { key: "2", title: "메모2" },
-        ]}
+        data={data}
+        keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{
           gap: 10,
         }}
