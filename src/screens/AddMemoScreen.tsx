@@ -38,16 +38,18 @@ const AddMemoScreen: FC<Props> = ({ navigation, route }) => {
   const [content, setContent] = useState<string>(memoData?.content || "");
 
   const onSave = useCallback(async () => {
-    const { error, data } = await supabase
-      .from("Memo")
-      .insert([{ title, content }]);
+    const { error, data } = await supabase.from("Memo").upsert({
+      id: memoData?.id,
+      title,
+      content,
+    });
 
     if (error) {
       Alert.alert(error.message);
       return;
     }
 
-    Alert.alert("저장되었습니다.");
+    Alert.alert(memoData?.id ? "수정되었습니다." : "저장되었습니다.");
     navigation.goBack();
   }, [title, content]);
 
