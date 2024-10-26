@@ -30,10 +30,13 @@ export const useMemoStore = create<MemoStoreState & MemoStoreAction>(
       }
 
       set({ isLoading: true });
+
       const { data, error } = await supabase
         .from("Memo")
         .select("id, title, content, created_at")
+        .order("id", { ascending: false })
         .limit(10);
+
       if (error) {
         console.error(error);
         return;
@@ -55,7 +58,8 @@ export const useMemoStore = create<MemoStoreState & MemoStoreAction>(
       const { data, error } = await supabase
         .from("Memo")
         .select("id, title, content, created_at")
-        .gt("id", get().lastId)
+        .order("id", { ascending: false })
+        .lt("id", get().lastId)
         .limit(10);
       if (error) {
         console.error(error);
