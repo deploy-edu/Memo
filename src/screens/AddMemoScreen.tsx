@@ -7,6 +7,7 @@ import Input from "../components/Input";
 import useKeyboardHeight from "../hooks/useKeyboardHeight";
 import { supabase } from "../libs/supabase";
 import { RootStackParamList } from "../navigators/RootStackNavigator";
+import { useMemoStore } from "../stores/useMemoStore";
 
 const Container = styled.View`
   flex: 1;
@@ -47,6 +48,16 @@ const AddMemoScreen: FC<Props> = ({ navigation, route }) => {
     if (error) {
       Alert.alert(error.message);
       return;
+    }
+
+    if (memoData?.id) {
+      const memo = {
+        id: memoData.id,
+        title,
+        content,
+      };
+
+      useMemoStore.getState().update(memo);
     }
 
     Alert.alert(memoData?.id ? "수정되었습니다." : "저장되었습니다.");

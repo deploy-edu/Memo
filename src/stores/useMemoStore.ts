@@ -17,6 +17,15 @@ export type MemoStoreState = {
 export type MemoStoreAction = {
   fetch: () => Promise<void>;
   fetchMore: () => Promise<void>;
+  update: ({
+    id,
+    title,
+    content,
+  }: {
+    id: number;
+    title: string;
+    content: string;
+  }) => Promise<void>;
 };
 
 export const useMemoStore = create<MemoStoreState & MemoStoreAction>(
@@ -75,6 +84,13 @@ export const useMemoStore = create<MemoStoreState & MemoStoreAction>(
         data: [...state.data, ...data],
         isLoading: false,
         lastId: data[data.length - 1].id,
+      }));
+    },
+    update: async ({ id, title, content }) => {
+      set((state) => ({
+        data: state.data.map((item) =>
+          item.id === id ? { ...item, title, content } : item
+        ),
       }));
     },
   })
