@@ -13,6 +13,7 @@ export type AuthStoreAction = {
 
 export const useAuthStore = create<AuthStoreState & AuthStoreAction>((set) => ({
   isLoggedIn: false,
+  session: undefined,
   login: (session) => set({ session, isLoggedIn: true }),
   logout: () => set({ isLoggedIn: false, session: undefined }),
 }));
