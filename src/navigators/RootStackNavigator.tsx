@@ -5,6 +5,7 @@ import { supabase } from "../libs/supabase";
 import AddMemoScreen from "../screens/AddMemoScreen";
 import LoginScreen from "../screens/LoginScreen";
 import SignUpScreen from "../screens/SignUpScreen";
+import ViewMemoScreen from "../screens/ViewMemoScreen";
 import { useAuthStore } from "../stores/useAuthStore";
 import { Memo } from "../stores/useMemoStore";
 import MainTabNavigator from "./MainTabNavigator";
@@ -15,6 +16,9 @@ export type RootStackParamList = {
   SignUp: undefined;
   AddMemo: {
     data?: Memo;
+  };
+  ViewMemo: {
+    data: Memo;
   };
 };
 
@@ -58,25 +62,13 @@ export default function RootStackNavigator() {
       }}
     >
       {isLoggedIn ? (
-        <Stack.Screen
-          name="MainTab"
-          component={MainTabNavigator}
-          options={{
-            headerTitle: "홈",
-          }}
-        />
+        <Stack.Screen name="MainTab" component={MainTabNavigator} />
       ) : (
         <Stack.Screen name="Login" component={LoginScreen} />
       )}
       <Stack.Screen name="SignUp" component={SignUpScreen} />
-      <Stack.Screen
-        name="AddMemo"
-        component={AddMemoScreen}
-        options={{
-          headerShown: true,
-          headerTitle: "메모 추가",
-        }}
-      />
+      <Stack.Screen name="AddMemo" component={AddMemoScreen} />
+      <Stack.Screen name="ViewMemo" component={ViewMemoScreen} />
     </Stack.Navigator>
   );
 }

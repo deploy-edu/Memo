@@ -34,7 +34,7 @@ const HomeScreen: FC<Props> = ({ navigation }) => {
 
   const onView = useCallback(
     (item: Memo) => () => {
-      navigation.navigate("AddMemo", {
+      navigation.navigate("ViewMemo", {
         data: item,
       });
     },
