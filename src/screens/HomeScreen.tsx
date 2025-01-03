@@ -5,25 +5,16 @@ import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { FC, useCallback, useEffect } from "react";
 import { FlatList } from "react-native";
+import Header from "../components/Header";
 import MemoListItem from "../components/MemoListItem";
+import RootLayoutContainer from "../components/RootLayoutContainer";
 import { MainTabNavigatorParamList } from "../navigators/MainTabNavigator";
 import { RootStackParamList } from "../navigators/RootStackNavigator";
 import { Memo, useMemoStore } from "../stores/useMemoStore";
 
-const Container = styled.View`
-  flex: 1;
-  padding: 20px;
-  background-color: #fff;
-`;
-
 const AddButton = styled.Pressable`
-  width: 60px;
-  height: 60px;
-  border-radius: 30px;
   align-items: center;
   justify-content: center;
-  align-self: flex-end;
-  margin-bottom: 20px;
 `;
 
 type Props = CompositeScreenProps<
@@ -34,6 +25,7 @@ type Props = CompositeScreenProps<
 const HomeScreen: FC<Props> = ({ navigation }) => {
   const data = useMemoStore((state) => state.data);
   const isLoading = useMemoStore((state) => state.isLoading);
+
   const onAdd = useCallback(() => {
     navigation.navigate("AddMemo", {
       data: undefined,
@@ -54,15 +46,23 @@ const HomeScreen: FC<Props> = ({ navigation }) => {
   }, []);
 
   return (
-    <Container>
+    <RootLayoutContainer>
       <FlatList
-        ListHeaderComponent={
-          <AddButton onPress={onAdd}>
-            <Icon name="pencil" size={30} />
-          </AddButton>
-        }
         data={data}
         keyExtractor={(item) => item.id.toString()}
+        ListHeaderComponent={
+          <Header
+            title="메모"
+            RightComponent={
+              <AddButton
+                onPress={onAdd}
+                hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+              >
+                <Icon name="pencil" size={30} />
+              </AddButton>
+            }
+          />
+        }
         refreshing={isLoading}
         onRefresh={() => {
           useMemoStore.getState().fetch();
@@ -73,11 +73,16 @@ const HomeScreen: FC<Props> = ({ navigation }) => {
         contentContainerStyle={{
           gap: 10,
         }}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <MemoListItem title={item.title} onPress={onView(item)} />
+          <MemoListItem
+            title={item.title}
+            content={item.content}
+            onPress={onView(item)}
+          />
         )}
       />
-    </Container>
+    </RootLayoutContainer>
   );
 };
 

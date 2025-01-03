@@ -1,20 +1,17 @@
 import styled from "@emotion/native";
+
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { FC, useCallback, useState } from "react";
 import { Alert } from "react-native";
+import BackButton from "../components/BackButton";
 import Button from "../components/Button";
+import Header from "../components/Header";
 import Input from "../components/Input";
+import RootLayoutContainer from "../components/RootLayoutContainer";
 import useKeyboardHeight from "../hooks/useKeyboardHeight";
 import { supabase } from "../libs/supabase";
 import { RootStackParamList } from "../navigators/RootStackNavigator";
 import { useMemoStore } from "../stores/useMemoStore";
-
-const Container = styled.View`
-  flex: 1;
-  padding: 20px;
-  background-color: #fff;
-  gap: 10px;
-`;
 
 const ContentContainer = styled.View`
   flex: 1;
@@ -37,6 +34,10 @@ const AddMemoScreen: FC<Props> = ({ navigation, route }) => {
   const { keyboardHeight } = useKeyboardHeight();
   const [title, setTitle] = useState<string>(memoData?.title || "");
   const [content, setContent] = useState<string>(memoData?.content || "");
+
+  const onBack = useCallback(() => {
+    navigation.goBack();
+  }, []);
 
   const onSave = useCallback(async () => {
     const { error, data } = await supabase.from("Memo").upsert({
@@ -65,13 +66,17 @@ const AddMemoScreen: FC<Props> = ({ navigation, route }) => {
   }, [title, content]);
 
   return (
-    <Container
+    <RootLayoutContainer
       style={[
         {
           paddingBottom: keyboardHeight,
         },
       ]}
+      containerStyle={{
+        gap: 10,
+      }}
     >
+      <Header LeftComponent={<BackButton onPress={onBack} />} title="메모" />
       <TitleInput
         placeholder="제목을 입력하세요"
         value={title}
@@ -90,7 +95,7 @@ const AddMemoScreen: FC<Props> = ({ navigation, route }) => {
         />
       </ContentContainer>
       <Button title="저장" onPress={onSave} />
-    </Container>
+    </RootLayoutContainer>
   );
 };
 

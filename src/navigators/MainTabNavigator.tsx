@@ -14,7 +14,12 @@ const Tab = createBottomTabNavigator<MainTabNavigatorParamList>();
 
 export default function MainTabNavigator() {
   return (
-    <Tab.Navigator initialRouteName="Home">
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}

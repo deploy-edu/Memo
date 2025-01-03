@@ -6,26 +6,19 @@ import React, { FC, useCallback, useState } from "react";
 import { Alert } from "react-native";
 import Button from "../components/Button";
 import CommonText from "../components/CommonText";
+import Header from "../components/Header";
 import Input from "../components/Input";
+import RootLayoutContainer from "../components/RootLayoutContainer";
 import { supabase } from "../libs/supabase";
 import { useAuthStore } from "../stores/useAuthStore";
 
-const Container = styled.ScrollView`
-  flex: 1;
-  padding: 20px;
-`;
-
-const InnerContainer = styled.View`
-  gap: 20px;
-`;
-
 const Title = styled(CommonText)`
-  font-size: 24px;
+  font-size: 16px;
   font-weight: bold;
 `;
 
 const Value = styled(CommonText)`
-  font-size: 20px;
+  font-size: 16px;
 `;
 
 const ItemContainer = styled.View`
@@ -34,8 +27,10 @@ const ItemContainer = styled.View`
 `;
 
 const StyledInput = styled(Input)`
-  font-size: 20px;
+  font-size: 16px;
   border-width: 1px;
+  border-color: #ddd;
+  border-radius: 10px;
 `;
 
 const IconContainer = styled.View`
@@ -46,6 +41,13 @@ const IconContainer = styled.View`
   height: 100px;
   border-radius: 50px;
   border: 1px solid skyblue;
+`;
+
+const DatePickerContainer = styled.View`
+  border-width: 1px;
+  border-radius: 10px;
+  border-color: #ddd;
+  align-items: center;
 `;
 
 const ProfileScreen: FC = () => {
@@ -120,32 +122,33 @@ const ProfileScreen: FC = () => {
   console.log("birth", birth);
 
   return (
-    <Container>
-      <InnerContainer>
-        <IconContainer>
-          <Icon name="user" size={50} color="skyblue" />
-        </IconContainer>
-        <ItemContainer>
-          <Title>email</Title>
-          <Value>{email}</Value>
-        </ItemContainer>
-        <ItemContainer>
-          <Title>이름</Title>
-          <StyledInput
-            placeholder="이름을 입력하세요.."
-            value={username}
-            onChangeText={(text) => {
-              setUsername(text);
-            }}
-          />
-        </ItemContainer>
-        <ItemContainer>
-          <Title>생년월일</Title>
+    <RootLayoutContainer
+      containerStyle={{
+        gap: 30,
+      }}
+    >
+      <Header title="프로필" />
+      <IconContainer>
+        <Icon name="user" size={50} color="skyblue" />
+      </IconContainer>
+      <ItemContainer>
+        <Title>이메일</Title>
+        <Value>{email}</Value>
+      </ItemContainer>
+      <ItemContainer>
+        <Title>이름</Title>
+        <StyledInput
+          placeholder="이름을 입력하세요.."
+          value={username}
+          onChangeText={(text) => {
+            setUsername(text);
+          }}
+        />
+      </ItemContainer>
+      <ItemContainer>
+        <Title>생년월일</Title>
+        <DatePickerContainer>
           <DateTimePicker
-            style={{
-              borderWidth: 1,
-              borderRadius: 5,
-            }}
             display="spinner"
             mode="date"
             value={birth ? new Date(birth) : new Date()}
@@ -155,10 +158,10 @@ const ProfileScreen: FC = () => {
               }
             }}
           />
-        </ItemContainer>
-        <Button title="저장" onPress={onSave} />
-      </InnerContainer>
-    </Container>
+        </DatePickerContainer>
+      </ItemContainer>
+      <Button title="저장" onPress={onSave} />
+    </RootLayoutContainer>
   );
 };
 
