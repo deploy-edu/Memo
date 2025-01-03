@@ -93,5 +93,17 @@ export const useMemoStore = create<MemoStoreState & MemoStoreAction>(
         ),
       }));
     },
+    delete: async (id: number) => {
+
+      const { error } = await supabase.from("Memo").delete().eq("id", id);
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      set((state) => ({
+        data: state.data.filter((item) => item.id !== id),
+      }));
+    },
   })
 );
