@@ -26,6 +26,7 @@ export type MemoStoreAction = {
     title: string;
     content: string;
   }) => Promise<void>;
+  delete: (id: number) => Promise<void>;
 };
 
 export const useMemoStore = create<MemoStoreState & MemoStoreAction>(
@@ -87,6 +88,17 @@ export const useMemoStore = create<MemoStoreState & MemoStoreAction>(
       }));
     },
     update: async ({ id, title, content }) => {
+      const { error } = await supabase.from("Memo").upsert({
+        id,
+        title,
+        content,
+      });
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
       set((state) => ({
         data: state.data.map((item) =>
           item.id === id ? { ...item, title, content } : item
@@ -94,7 +106,6 @@ export const useMemoStore = create<MemoStoreState & MemoStoreAction>(
       }));
     },
     delete: async (id: number) => {
-
       const { error } = await supabase.from("Memo").delete().eq("id", id);
       if (error) {
         console.error(error);
