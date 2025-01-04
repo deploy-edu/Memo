@@ -1,3 +1,4 @@
+import { Dayjs } from "dayjs";
 import { create } from "zustand";
 import { supabase } from "../libs/supabase";
 
@@ -12,9 +13,11 @@ export type MemoStoreState = {
   lastId: number;
   data: Memo[];
   isLoading: boolean;
+  filterDay?: Dayjs;
 };
 
 export type MemoStoreAction = {
+  setFilterDay: (day: Dayjs) => void;
   fetch: () => Promise<void>;
   fetchMore: () => Promise<void>;
   update: ({
@@ -32,8 +35,12 @@ export type MemoStoreAction = {
 export const useMemoStore = create<MemoStoreState & MemoStoreAction>(
   (set, get) => ({
     isLoading: false,
+    filterDay: undefined,
     data: [],
     lastId: 0,
+    setFilterDay: (day) => {
+      set({ filterDay: day });
+    },
     fetch: async () => {
       if (get().isLoading) {
         return;
@@ -41,11 +48,23 @@ export const useMemoStore = create<MemoStoreState & MemoStoreAction>(
 
       set({ isLoading: true });
 
-      const { data, error } = await supabase
+      const query = supabase
         .from("Memo")
         .select("id, title, content, created_at")
         .order("id", { ascending: false })
         .limit(10);
+
+      const filterDay = get().filterDay;
+
+      if (filterDay) {
+        const startOfDay = filterDay.startOf("day");
+        const endOfDay = filterDay.endOf("day");
+
+        query.gte("created_at", startOfDay.toISOString());
+        query.lte("created_at", endOfDay.toISOString());
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         console.error(error);
@@ -65,12 +84,25 @@ export const useMemoStore = create<MemoStoreState & MemoStoreAction>(
       }
 
       set({ isLoading: true });
-      const { data, error } = await supabase
+      const query = supabase
         .from("Memo")
         .select("id, title, content, created_at")
         .order("id", { ascending: false })
         .lt("id", get().lastId)
         .limit(10);
+
+      const filterDay = get().filterDay;
+
+      if (filterDay) {
+        const startOfDay = filterDay.startOf("day");
+        const endOfDay = filterDay.endOf("day");
+
+        query.gte("created_at", startOfDay.toISOString());
+        query.lte("created_at", endOfDay.toISOString());
+      }
+
+      const { data, error } = await query;
+
       if (error) {
         console.error(error);
         return;

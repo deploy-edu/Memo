@@ -1,8 +1,10 @@
+import DaySelector from "@/components/DaySelector";
 import styled from "@emotion/native";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
+import { Dayjs } from "dayjs";
 import React, { FC, useCallback, useEffect } from "react";
 import { FlatList } from "react-native";
 import Header from "../components/Header";
@@ -45,23 +47,31 @@ const HomeScreen: FC<Props> = ({ navigation }) => {
     useMemoStore.getState().fetch();
   }, []);
 
+  const onSelect = useCallback((day: Dayjs) => {
+    useMemoStore.getState().setFilterDay(day);
+    useMemoStore.getState().fetch();
+  }, []);
+
   return (
     <RootLayoutContainer>
       <FlatList
         data={data}
         keyExtractor={(item) => item.id.toString()}
         ListHeaderComponent={
-          <Header
-            title="메모"
-            RightComponent={
-              <AddButton
-                onPress={onAdd}
-                hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
-              >
-                <Icon name="pencil" size={30} />
-              </AddButton>
-            }
-          />
+          <>
+            <Header
+              title="메모"
+              RightComponent={
+                <AddButton
+                  onPress={onAdd}
+                  hitSlop={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                >
+                  <Icon name="pencil" size={30} />
+                </AddButton>
+              }
+            />
+            <DaySelector onSelect={onSelect} />
+          </>
         }
         refreshing={isLoading}
         onRefresh={() => {
