@@ -48,7 +48,13 @@ const HomeScreen: FC<Props> = ({ navigation }) => {
   }, []);
 
   const onSelect = useCallback((day: Dayjs) => {
-    useMemoStore.getState().setFilterDay(day);
+    const filterDay = useMemoStore.getState().filterDay;
+
+    useMemoStore
+      .getState()
+      .setFilterDay(
+        filterDay && filterDay.isSame(day) === true ? undefined : day
+      );
     useMemoStore.getState().fetch();
   }, []);
 

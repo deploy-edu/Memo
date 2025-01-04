@@ -17,7 +17,7 @@ export type MemoStoreState = {
 };
 
 export type MemoStoreAction = {
-  setFilterDay: (day: Dayjs) => void;
+  setFilterDay: (day: Dayjs | undefined) => void;
   fetch: () => Promise<void>;
   fetchMore: () => Promise<void>;
   update: ({
