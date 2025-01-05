@@ -1,4 +1,5 @@
 import Avatar from "@/components/Avatar";
+import useKeyboardHeight from "@/hooks/useKeyboardHeight";
 import styled from "@emotion/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useFocusEffect } from "@react-navigation/native";
@@ -58,6 +59,7 @@ const ProfileScreen: FC = () => {
   const [birth, setBirth] = useState<Date | null>();
   const [username, setUsername] = useState<string>("");
   const session = useAuthStore((state) => state.session);
+  const { keyboardHeight } = useKeyboardHeight();
 
   const onSave = useCallback(async () => {
     try {
@@ -126,6 +128,7 @@ const ProfileScreen: FC = () => {
     <RootLayoutContainer
       containerStyle={{
         gap: 30,
+        paddingBottom: keyboardHeight,
       }}
     >
       <Header title="프로필" />
