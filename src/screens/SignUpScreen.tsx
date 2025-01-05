@@ -18,15 +18,6 @@ const Container = styled.View`
   gap: 20px;
 `;
 
-const IconContainer = styled.View`
-  align-items: center;
-  justify-content: center;
-  width: 100px;
-  height: 100px;
-  border-radius: 50px;
-  border: 1px solid skyblue;
-`;
-
 const CloseButtton = styled.TouchableOpacity`
   position: absolute;
   top: 20px;
@@ -80,9 +71,6 @@ const SignUpScreen: FC<Props> = ({ navigation }) => {
       >
         <Icon name="close" size={20} color="#000" />
       </CloseButtton>
-      <IconContainer>
-        <Icon name="user" size={50} color="skyblue" />
-      </IconContainer>
       <Input
         placeholder="아이디"
         value={email}
