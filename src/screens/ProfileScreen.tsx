@@ -1,5 +1,5 @@
+import Avatar from "@/components/Avatar";
 import styled from "@emotion/native";
-import Icon from "@expo/vector-icons/AntDesign";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useFocusEffect } from "@react-navigation/native";
 import React, { FC, useCallback, useState } from "react";
@@ -33,14 +33,10 @@ const StyledInput = styled(Input)`
   border-radius: 10px;
 `;
 
-const IconContainer = styled.View`
+const AvatarContainer = styled.View`
   align-self: center;
   align-items: center;
   justify-content: center;
-  width: 100px;
-  height: 100px;
-  border-radius: 50px;
-  border: 1px solid skyblue;
 `;
 
 const DatePickerContainer = styled.View`
@@ -48,6 +44,11 @@ const DatePickerContainer = styled.View`
   border-radius: 10px;
   border-color: #ddd;
   align-items: center;
+`;
+
+const ScorllViewContainer = styled.ScrollView`
+  gap: 20px;
+  padding-vertical: 20px;
 `;
 
 const ProfileScreen: FC = () => {
@@ -128,38 +129,51 @@ const ProfileScreen: FC = () => {
       }}
     >
       <Header title="프로필" />
-      <IconContainer>
-        <Icon name="user" size={50} color="skyblue" />
-      </IconContainer>
-      <ItemContainer>
-        <Title>이메일</Title>
-        <Value>{email}</Value>
-      </ItemContainer>
-      <ItemContainer>
-        <Title>이름</Title>
-        <StyledInput
-          placeholder="이름을 입력하세요.."
-          value={username}
-          onChangeText={(text) => {
-            setUsername(text);
-          }}
-        />
-      </ItemContainer>
-      <ItemContainer>
-        <Title>생년월일</Title>
-        <DatePickerContainer>
-          <DateTimePicker
-            display="spinner"
-            mode="date"
-            value={birth ? new Date(birth) : new Date()}
-            onChange={(event, date) => {
-              if (event.type === "set") {
-                setBirth(date);
-              }
+      <ScorllViewContainer
+        contentContainerStyle={{
+          gap: 20,
+        }}
+      >
+        <AvatarContainer>
+          <Avatar
+            size={200}
+            url={avatarUrl}
+            onUpload={(url: string) => {
+              console.log("url", url);
+              setAvatarUrl(url);
             }}
           />
-        </DatePickerContainer>
-      </ItemContainer>
+        </AvatarContainer>
+        <ItemContainer>
+          <Title>이메일</Title>
+          <Value>{email}</Value>
+        </ItemContainer>
+        <ItemContainer>
+          <Title>이름</Title>
+          <StyledInput
+            placeholder="이름을 입력하세요.."
+            value={username}
+            onChangeText={(text) => {
+              setUsername(text);
+            }}
+          />
+        </ItemContainer>
+        <ItemContainer>
+          <Title>생년월일</Title>
+          <DatePickerContainer>
+            <DateTimePicker
+              display="spinner"
+              mode="date"
+              value={birth ? new Date(birth) : new Date()}
+              onChange={(event, date) => {
+                if (event.type === "set") {
+                  setBirth(date);
+                }
+              }}
+            />
+          </DatePickerContainer>
+        </ItemContainer>
+      </ScorllViewContainer>
       <Button title="저장" onPress={onSave} />
     </RootLayoutContainer>
   );
