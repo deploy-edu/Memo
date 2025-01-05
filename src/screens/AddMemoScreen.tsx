@@ -55,13 +55,9 @@ const AddMemoScreen: FC<Props> = ({ navigation, route }) => {
 
   return (
     <RootLayoutContainer
-      style={[
-        {
-          paddingBottom: keyboardHeight,
-        },
-      ]}
       containerStyle={{
         gap: 10,
+        paddingBottom: keyboardHeight,
       }}
     >
       <Header LeftComponent={<BackButton onPress={onBack} />} title="메모" />
