@@ -41,12 +41,19 @@ const AddMemoScreen: FC<Props> = ({ navigation, route }) => {
   const onSave = useCallback(async () => {
     if (memoData?.id) {
       const memo = {
-        id: memoData.id,
+        id: memoData?.id,
         title,
         content,
       };
 
       useMemoStore.getState().update(memo);
+    } else {
+      const memo = {
+        title,
+        content,
+      };
+
+      useMemoStore.getState().add(memo);
     }
 
     Alert.alert(memoData?.id ? "수정되었습니다." : "저장되었습니다.");

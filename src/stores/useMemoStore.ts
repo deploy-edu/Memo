@@ -20,12 +20,19 @@ export type MemoStoreAction = {
   setFilterDay: (day: Dayjs | undefined) => void;
   fetch: () => Promise<void>;
   fetchMore: () => Promise<void>;
+  add: ({
+    title,
+    content,
+  }: {
+    title: string;
+    content: string;
+  }) => Promise<void>;
   update: ({
     id,
     title,
     content,
   }: {
-    id: number;
+    id?: number;
     title: string;
     content: string;
   }) => Promise<void>;
@@ -117,6 +124,24 @@ export const useMemoStore = create<MemoStoreState & MemoStoreAction>(
         data: [...state.data, ...data],
         isLoading: false,
         lastId: data[data.length - 1].id,
+      }));
+    },
+    add: async ({ title, content }) => {
+      const { data, error } = await supabase
+        .from("Memo")
+        .insert([{ title, content }])
+        .select("id, title, content, created_at");
+
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      set((state) => ({
+        data: [
+          { id: data[0].id, title, content, created_at: new Date() },
+          ...state.data,
+        ],
       }));
     },
     update: async ({ id, title, content }) => {
