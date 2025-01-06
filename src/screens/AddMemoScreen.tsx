@@ -3,7 +3,6 @@ import styled from "@emotion/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { FC, useCallback, useState } from "react";
 import { Alert } from "react-native";
-import BackButton from "../components/BackButton";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import Input from "../components/Input";
@@ -34,10 +33,6 @@ const AddMemoScreen: FC<Props> = ({ navigation, route }) => {
   const [title, setTitle] = useState<string>(memoData?.title || "");
   const [content, setContent] = useState<string>(memoData?.content || "");
 
-  const onBack = useCallback(() => {
-    navigation.goBack();
-  }, []);
-
   const onSave = useCallback(async () => {
     if (memoData?.id) {
       const memo = {
@@ -67,7 +62,7 @@ const AddMemoScreen: FC<Props> = ({ navigation, route }) => {
         paddingBottom: keyboardHeight,
       }}
     >
-      <Header LeftComponent={<BackButton onPress={onBack} />} title="메모" />
+      <Header backable title="메모 수정" />
       <TitleInput
         placeholder="제목을 입력하세요"
         value={title}

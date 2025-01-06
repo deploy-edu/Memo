@@ -13,14 +13,12 @@ import { useMemoStore } from "../stores/useMemoStore";
 
 const ContentContainer = styled.View`
   flex: 1;
-  background-color: #f1f1f1;
   padding: 20px;
   border-radius: 10px;
 `;
 
 const TitleContainer = styled.View`
   padding: 20px;
-  background-color: #f1f1f1;
   padding: 20px;
   border-radius: 10px;
 `;
@@ -72,6 +70,7 @@ const ViewMemoScreen: FC<Props> = ({ navigation, route }) => {
     >
       <Header
         title="메모"
+        backable
         RightComponent={
           <EditButton onPress={onAdd}>
             <Icon name="note-edit-outline" size={30} />

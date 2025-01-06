@@ -20,7 +20,9 @@ export type License = {
 const LicensesScreen: FC<Props> = ({ navigation }) => {
   const data = useMemo<License[]>(
     () =>
-      Object.entries(licenses).map(([key, row]) => {
+      Object.entries(
+        licenses as unknown as Record<string, Omit<License, "packageName">>
+      ).map(([key, row]) => {
         return {
           packageName: key,
           licenses: row.licenses,
@@ -47,7 +49,7 @@ const LicensesScreen: FC<Props> = ({ navigation }) => {
         gap: 10,
       }}
     >
-      <Header title="라이센스" />
+      <Header backable title="라이센스" />
       <FlatList
         data={data}
         contentContainerStyle={{

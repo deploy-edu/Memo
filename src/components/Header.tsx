@@ -8,6 +8,7 @@ import CommonText from "./CommonText";
 type Props = {
   style?: ViewStyle;
   title: string;
+  backable?: boolean;
   LeftComponent?: ReactNode;
   RightComponent?: ReactNode;
 };
@@ -49,7 +50,13 @@ const Title = styled(CommonText)`
   font-weight: bold;
 `;
 
-const Header: FC<Props> = ({ style, title, LeftComponent, RightComponent }) => {
+const Header: FC<Props> = ({
+  style,
+  title,
+  backable = false,
+  LeftComponent,
+  RightComponent,
+}) => {
   const navigation = useNavigation();
   const onBack = useCallback(() => {
     navigation.goBack();
@@ -58,7 +65,9 @@ const Header: FC<Props> = ({ style, title, LeftComponent, RightComponent }) => {
   return (
     <Container style={style}>
       <LeftComponentContainer>
-        {LeftComponent ? LeftComponent : <BackButton onPress={onBack} />}
+        {LeftComponent
+          ? LeftComponent
+          : backable && <BackButton onPress={onBack} />}
       </LeftComponentContainer>
       <TitleContainer>
         <Title>{title}</Title>

@@ -23,7 +23,7 @@ const AppVersionScreen: FC<Props> = () => {
         gap: 10,
       }}
     >
-      <Header title="앱 버전" />
+      <Header backable title="앱 버전" />
       <AppVersion>{Application.nativeApplicationVersion}</AppVersion>
     </RootLayoutContainer>
   );

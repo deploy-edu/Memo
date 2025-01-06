@@ -7,7 +7,6 @@ import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { useFocusEffect } from "@react-navigation/native";
 import React, { FC, useCallback, useState } from "react";
 import { Alert } from "react-native";
-import Button from "../components/Button";
 import CommonText from "../components/CommonText";
 import Header from "../components/Header";
 import Input from "../components/Input";
@@ -54,6 +53,13 @@ const DatePickerContainer = styled.View`
 const ScorllViewContainer = styled.ScrollView`
   gap: 20px;
   padding-vertical: 20px;
+`;
+
+const SaveButton = styled.Pressable``;
+
+const SaveButtonText = styled(CommonText)`
+  font-size: 16px;
+  font-weight: bold;
 `;
 
 const ProfileScreen: FC<Props> = () => {
@@ -135,7 +141,14 @@ const ProfileScreen: FC<Props> = () => {
         paddingBottom: keyboardHeight,
       }}
     >
-      <Header title="프로필" />
+      <Header
+        title="프로필"
+        RightComponent={
+          <SaveButton onPress={onSave}>
+            <SaveButtonText>저장</SaveButtonText>
+          </SaveButton>
+        }
+      />
       <ScorllViewContainer
         contentContainerStyle={{
           gap: 20,
@@ -181,7 +194,6 @@ const ProfileScreen: FC<Props> = () => {
           </DatePickerContainer>
         </ItemContainer>
       </ScorllViewContainer>
-      <Button title="저장" onPress={onSave} />
     </RootLayoutContainer>
   );
 };
