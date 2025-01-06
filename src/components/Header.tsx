@@ -1,6 +1,8 @@
 import styled from "@emotion/native";
-import React, { FC, ReactNode } from "react";
+import { useNavigation } from "@react-navigation/native";
+import React, { FC, ReactNode, useCallback } from "react";
 import { ViewStyle } from "react-native";
+import BackButton from "./BackButton";
 import CommonText from "./CommonText";
 
 type Props = {
@@ -48,9 +50,16 @@ const Title = styled(CommonText)`
 `;
 
 const Header: FC<Props> = ({ style, title, LeftComponent, RightComponent }) => {
+  const navigation = useNavigation();
+  const onBack = useCallback(() => {
+    navigation.goBack();
+  }, []);
+
   return (
     <Container style={style}>
-      <LeftComponentContainer>{LeftComponent}</LeftComponentContainer>
+      <LeftComponentContainer>
+        {LeftComponent ? LeftComponent : <BackButton onPress={onBack} />}
+      </LeftComponentContainer>
       <TitleContainer>
         <Title>{title}</Title>
       </TitleContainer>
