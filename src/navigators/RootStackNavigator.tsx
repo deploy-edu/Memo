@@ -1,3 +1,6 @@
+import AppVersionScreen from "@/screens/AppVersionScreen";
+import LicensesScreen, { License } from "@/screens/LicensesScreen";
+import LicenseViewScreen from "@/screens/LicenseViewScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useEffect } from "react";
 import { AppState } from "react-native";
@@ -19,6 +22,11 @@ export type RootStackParamList = {
   };
   ViewMemo: {
     data: Memo;
+  };
+  AppVersion: undefined;
+  Licenses: undefined;
+  LicenseView: {
+    data: License;
   };
 };
 
@@ -69,6 +77,9 @@ export default function RootStackNavigator() {
       <Stack.Screen name="SignUp" component={SignUpScreen} />
       <Stack.Screen name="AddMemo" component={AddMemoScreen} />
       <Stack.Screen name="ViewMemo" component={ViewMemoScreen} />
+      <Stack.Screen name="AppVersion" component={AppVersionScreen} />
+      <Stack.Screen name="Licenses" component={LicensesScreen} />
+      <Stack.Screen name="LicenseView" component={LicenseViewScreen} />
     </Stack.Navigator>
   );
 }
