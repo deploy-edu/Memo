@@ -3,7 +3,6 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { FC, useCallback, useState } from "react";
 import { Alert } from "react-native";
-import BackButton from "../components/BackButton";
 import Button from "../components/Button";
 import CommonText from "../components/CommonText";
 import Header from "../components/Header";
@@ -48,10 +47,6 @@ const ViewMemoScreen: FC<Props> = ({ navigation, route }) => {
   const [title, setTitle] = useState<string>(memoData?.title || "");
   const [content, setContent] = useState<string>(memoData?.content || "");
 
-  const onBack = useCallback(() => {
-    navigation.goBack();
-  }, []);
-
   const onDelete = useCallback(async () => {
     useMemoStore.getState().delete(memoData.id);
     Alert.alert("삭제되었습니다.");
@@ -76,7 +71,6 @@ const ViewMemoScreen: FC<Props> = ({ navigation, route }) => {
       }}
     >
       <Header
-        LeftComponent={<BackButton onPress={onBack} />}
         title="메모"
         RightComponent={
           <EditButton onPress={onAdd}>
