@@ -1,3 +1,5 @@
+import { MainTabNavigatorParamList } from "@/navigators/MainTabNavigator";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import React, { FC, useCallback } from "react";
 import Header from "../components/Header";
 import RootLayoutContainer from "../components/RootLayoutContainer";
@@ -5,7 +7,9 @@ import SettingListItem from "../components/SettingListItem";
 import { supabase } from "../libs/supabase";
 import { useAuthStore } from "../stores/useAuthStore";
 
-const SettingScreen: FC = () => {
+type Props = BottomTabScreenProps<MainTabNavigatorParamList, "Setting">;
+
+const SettingScreen: FC<Props> = () => {
   const onLogout = useCallback(async () => {
     await supabase.auth.signOut();
     useAuthStore.getState().logout();

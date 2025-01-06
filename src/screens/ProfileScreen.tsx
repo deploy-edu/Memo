@@ -1,7 +1,9 @@
 import Avatar from "@/components/Avatar";
 import useKeyboardHeight from "@/hooks/useKeyboardHeight";
+import { MainTabNavigatorParamList } from "@/navigators/MainTabNavigator";
 import styled from "@emotion/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { useFocusEffect } from "@react-navigation/native";
 import React, { FC, useCallback, useState } from "react";
 import { Alert } from "react-native";
@@ -12,6 +14,8 @@ import Input from "../components/Input";
 import RootLayoutContainer from "../components/RootLayoutContainer";
 import { supabase } from "../libs/supabase";
 import { useAuthStore } from "../stores/useAuthStore";
+
+type Props = BottomTabScreenProps<MainTabNavigatorParamList, "Profile">;
 
 const Title = styled(CommonText)`
   font-size: 16px;
@@ -52,7 +56,7 @@ const ScorllViewContainer = styled.ScrollView`
   padding-vertical: 20px;
 `;
 
-const ProfileScreen: FC = () => {
+const ProfileScreen: FC<Props> = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [avatarUrl, setAvatarUrl] = useState<string>("");
