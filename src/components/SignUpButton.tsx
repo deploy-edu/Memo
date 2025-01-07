@@ -1,32 +1,34 @@
 import styled from "@emotion/native";
 import React, { FC } from "react";
 import { ViewStyle } from "react-native";
-import CommonText from "./CommonText";
+import Button from "./Button";
 
 type Props = {
   style?: ViewStyle;
-  onPress: () => void;
+  onPress?: () => void;
 };
 
-const Container = styled.TouchableOpacity`
+const StyledButton = styled(Button)`
   width: 100%;
   padding: 20px;
   border-radius: 5px;
   align-items: center;
   border: 1px solid skyblue;
+  background-color: white;
 `;
 
-const Title = styled(CommonText)`
-  color: skyblue;
-  font-size: 16px;
-  font-weight: bold;
-`;
-
-const SignUpButton: FC<Props> = ({ onPress }) => {
+const SignUpButton: FC<Props> = ({ style, onPress }) => {
   return (
-    <Container onPress={onPress}>
-      <Title>회원가입</Title>
-    </Container>
+    <StyledButton
+      style={style}
+      titleStyle={{
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "skyblue",
+      }}
+      onPress={onPress}
+      title="회원가입"
+    />
   );
 };
 

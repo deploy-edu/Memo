@@ -1,10 +1,11 @@
 import styled from "@emotion/native";
 import React, { FC } from "react";
-import { ViewStyle } from "react-native";
+import { TextStyle, ViewStyle } from "react-native";
 import CommonText from "./CommonText";
 
 type Props = {
   style?: ViewStyle;
+  titleStyle?: TextStyle;
   title?: string;
   onPress?: () => void;
 };
@@ -23,10 +24,10 @@ const Title = styled(CommonText)`
   color: #fff;
 `;
 
-const Button: FC<Props> = ({ style, title, onPress }) => {
+const Button: FC<Props> = ({ style, titleStyle, title, onPress }) => {
   return (
     <Container style={style} onPress={onPress}>
-      <Title>{title}</Title>
+      <Title style={titleStyle}>{title}</Title>
     </Container>
   );
 };
