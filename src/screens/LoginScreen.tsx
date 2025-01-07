@@ -48,22 +48,22 @@ const LoginScreen: FC<Props> = ({ navigation }) => {
     useAuthStore.getState().login(session);
   }, [email, password]);
 
+  const onChangeEmail = useCallback((text: string) => {
+    setEmail(text);
+  }, []);
+
+  const onChangePassword = useCallback((text: string) => {
+    setPassword(text);
+  }, []);
+
   return (
     <Container>
-      <Input
-        placeholder="아이디"
-        value={email}
-        onChangeText={(text) => {
-          setEmail(text);
-        }}
-      />
+      <Input placeholder="아이디" value={email} onChangeText={onChangeEmail} />
       <Input
         placeholder="비밀번호"
         secureTextEntry
         value={password}
-        onChangeText={(text) => {
-          setPassword(text);
-        }}
+        onChangeText={onChangePassword}
       />
       <LoginButton onPress={onLogin} />
       <SignUpButton onPress={onSignUp} />
