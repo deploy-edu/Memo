@@ -1,5 +1,6 @@
 import styled from "@emotion/native";
 
+import { addMemo, updateMemo } from "@/libs/supabaseMemoApi";
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { FC, useCallback, useState } from "react";
 import { Alert } from "react-native";
@@ -34,25 +35,32 @@ const AddMemoScreen: FC<Props> = ({ navigation, route }) => {
   const [content, setContent] = useState<string>(memoData?.content || "");
 
   const onSave = useCallback(async () => {
-    if (memoData?.id) {
-      const memo = {
-        id: memoData?.id,
-        title,
-        content,
-      };
+    try {
+      if (memoData?.id) {
+        const memo = {
+          id: memoData.id,
+          title,
+          content,
+        };
+        const updatedMemo = await updateMemo(memo);
+        useMemoStore.getState().updateMemo(updatedMemo);
+      } else {
+        const memo = {
+          title,
+          content,
+        };
 
-      useMemoStore.getState().update(memo);
-    } else {
-      const memo = {
-        title,
-        content,
-      };
+        const addedMemo = await addMemo(memo);
+        useMemoStore.getState().addMemo(addedMemo);
+      }
 
-      useMemoStore.getState().add(memo);
+      Alert.alert(memoData?.id ? "수정되었습니다." : "저장되었습니다.");
+      navigation.goBack();
+    } catch (e) {
+      Alert.alert("저장에 실패했습니다.");
+      console.log(e);
+      return;
     }
-
-    Alert.alert(memoData?.id ? "수정되었습니다." : "저장되었습니다.");
-    navigation.goBack();
   }, [title, content]);
 
   return (

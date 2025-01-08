@@ -1,4 +1,5 @@
 import DaySelector from "@/components/DaySelector";
+import { fetchMemos } from "@/libs/supabaseMemoApi";
 import styled from "@emotion/native";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
@@ -43,19 +44,43 @@ const HomeScreen: FC<Props> = ({ navigation }) => {
     [navigation]
   );
 
-  useEffect(() => {
-    useMemoStore.getState().fetch();
+  const onSelect = useCallback(async (day: Dayjs) => {
+    const oldFilterDay = useMemoStore.getState().filterDay;
+    const newFilterDay =
+      oldFilterDay && oldFilterDay.isSame(day) === true ? undefined : day;
+    useMemoStore.getState().setFilterDay(newFilterDay);
+
+    const memos = await fetchMemos(newFilterDay);
+    const lastId = memos.length ? memos[memos.length - 1].id : undefined;
+    useMemoStore.getState().setMemos(memos, lastId);
   }, []);
 
-  const onSelect = useCallback((day: Dayjs) => {
-    const filterDay = useMemoStore.getState().filterDay;
+  const onRefresh = useCallback(async () => {
+    const memos = await fetchMemos();
+    const lastId = memos.length ? memos[memos.length - 1].id : undefined;
+    useMemoStore.getState().setMemos(memos, lastId);
+  }, []);
 
-    useMemoStore
-      .getState()
-      .setFilterDay(
-        filterDay && filterDay.isSame(day) === true ? undefined : day
-      );
-    useMemoStore.getState().fetch();
+  const onEndReached = useCallback(async () => {
+    const filterDay = useMemoStore.getState().filterDay;
+    const lastId = useMemoStore.getState().lastId;
+    const oldMemos = useMemoStore.getState().data;
+
+    const memos = await fetchMemos(filterDay, lastId);
+    const newMemos = oldMemos.concat(memos);
+    const newLastId = memos.length ? memos[memos.length - 1].id : lastId;
+
+    useMemoStore.getState().setMemos(newMemos, newLastId);
+  }, []);
+
+  useEffect(() => {
+    async function init() {
+      const memos = await fetchMemos();
+      const lastId = memos.length ? memos[memos.length - 1].id : undefined;
+      useMemoStore.getState().setMemos(memos, lastId);
+    }
+
+    init();
   }, []);
 
   return (
@@ -80,12 +105,8 @@ const HomeScreen: FC<Props> = ({ navigation }) => {
           </>
         }
         refreshing={isLoading}
-        onRefresh={() => {
-          useMemoStore.getState().fetch();
-        }}
-        onEndReached={() => {
-          useMemoStore.getState().fetchMore();
-        }}
+        onRefresh={onRefresh}
+        onEndReached={onEndReached}
         contentContainerStyle={{
           gap: 10,
         }}

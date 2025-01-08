@@ -1,3 +1,4 @@
+import { deleteMemo } from "@/libs/supabaseMemoApi";
 import styled from "@emotion/native";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { StackScreenProps } from "@react-navigation/stack";
@@ -46,9 +47,16 @@ const ViewMemoScreen: FC<Props> = ({ navigation, route }) => {
   const [content, setContent] = useState<string>(memoData?.content || "");
 
   const onDelete = useCallback(async () => {
-    useMemoStore.getState().delete(memoData.id);
-    Alert.alert("삭제되었습니다.");
-    navigation.goBack();
+    try {
+      const memo = await deleteMemo(memoData.id);
+      useMemoStore.getState().deleteMemo(memoData.id);
+      Alert.alert("삭제되었습니다.");
+      navigation.goBack();
+    } catch (e) {
+      Alert.alert("삭제에 실패했습니다.");
+      console.log(e);
+      return;
+    }
   }, [title, content]);
 
   const onAdd = useCallback(() => {
