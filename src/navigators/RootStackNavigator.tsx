@@ -1,8 +1,9 @@
 import AppVersionScreen from "@/screens/AppVersionScreen";
 import LicensesScreen, { License } from "@/screens/LicensesScreen";
 import LicenseViewScreen from "@/screens/LicenseViewScreen";
+import LoadingScreen from "@/screens/LoadingScreen";
 import { createStackNavigator } from "@react-navigation/stack";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AppState } from "react-native";
 import { supabase } from "../libs/supabase";
 import AddMemoScreen from "../screens/AddMemoScreen";
@@ -42,26 +43,30 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 export default function RootStackNavigator() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const [isSessionRestored, setIsSessionRestored] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
         useAuthStore.getState().logout();
-        return;
+      } else {
+        useAuthStore.getState().login(session);
       }
-
-      useAuthStore.getState().login(session);
+      setIsSessionRestored(true);
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
       if (!session) {
         useAuthStore.getState().logout();
-        return;
+      } else {
+        useAuthStore.getState().login(session);
       }
-
-      useAuthStore.getState().login(session);
     });
   }, []);
+
+  if (!isSessionRestored) {
+    return <LoadingScreen />;
+  }
 
   return (
     <Stack.Navigator
