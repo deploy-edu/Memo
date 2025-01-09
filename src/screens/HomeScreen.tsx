@@ -6,7 +6,7 @@ import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import { Dayjs } from "dayjs";
-import React, { FC, useCallback, useEffect } from "react";
+import React, { FC, useCallback, useEffect, useRef } from "react";
 import { FlatList } from "react-native";
 import Header from "../components/Header";
 import MemoListItem from "../components/MemoListItem";
@@ -27,7 +27,8 @@ type Props = CompositeScreenProps<
 
 const HomeScreen: FC<Props> = ({ navigation }) => {
   const data = useMemoStore((state) => state.data);
-  const isLoading = useMemoStore((state) => state.isLoading);
+  const isRefreshing = useMemoStore((state) => state.isRefreshing);
+  const isLoadingRef = useRef(isRefreshing);
 
   const onAdd = useCallback(() => {
     navigation.navigate("AddMemo", {
@@ -56,12 +57,20 @@ const HomeScreen: FC<Props> = ({ navigation }) => {
   }, []);
 
   const onRefresh = useCallback(async () => {
+    useMemoStore.getState().setIsRefreshing(true);
     const memos = await fetchMemos();
     const lastId = memos.length ? memos[memos.length - 1].id : undefined;
     useMemoStore.getState().setMemos(memos, lastId);
+    useMemoStore.getState().setIsRefreshing(false);
   }, []);
 
   const onEndReached = useCallback(async () => {
+    if (isLoadingRef.current === true) {
+      return;
+    }
+
+    console.log("onEndReached");
+    isLoadingRef.current = true;
     const filterDay = useMemoStore.getState().filterDay;
     const lastId = useMemoStore.getState().lastId;
     const oldMemos = useMemoStore.getState().data;
@@ -71,13 +80,23 @@ const HomeScreen: FC<Props> = ({ navigation }) => {
     const newLastId = memos.length ? memos[memos.length - 1].id : lastId;
 
     useMemoStore.getState().setMemos(newMemos, newLastId);
+    isLoadingRef.current = false;
   }, []);
 
   useEffect(() => {
     async function init() {
-      const memos = await fetchMemos();
-      const lastId = memos.length ? memos[memos.length - 1].id : undefined;
-      useMemoStore.getState().setMemos(memos, lastId);
+      try {
+        isLoadingRef.current = true;
+        console.log("init");
+        const memos = await fetchMemos();
+        console.log("memos", memos);
+        const lastId =
+          memos.length > 0 ? memos[memos.length - 1].id : undefined;
+        useMemoStore.getState().setMemos(memos, lastId);
+        isLoadingRef.current = false;
+      } catch (e) {
+        console.log(e);
+      }
     }
 
     init();
@@ -104,7 +123,7 @@ const HomeScreen: FC<Props> = ({ navigation }) => {
             <DaySelector onSelect={onSelect} />
           </>
         }
-        refreshing={isLoading}
+        refreshing={isRefreshing}
         onRefresh={onRefresh}
         onEndReached={onEndReached}
         contentContainerStyle={{

@@ -11,7 +11,7 @@ export type Memo = {
 export type MemoStoreState = {
   lastId: number;
   data: Memo[];
-  isLoading: boolean;
+  isRefreshing: boolean;
   filterDay?: Dayjs;
 };
 
@@ -21,10 +21,11 @@ export type MemoStoreAction = {
   addMemo: (memo: Memo) => void;
   updateMemo: (updatedMemo: Memo) => void;
   deleteMemo: (id: number) => void;
+  setIsRefreshing: (isRefreshing: boolean) => void;
 };
 
 export const useMemoStore = create<MemoStoreState & MemoStoreAction>((set) => ({
-  isLoading: false,
+  isRefreshing: false,
   filterDay: undefined,
   data: [],
   lastId: 0,
@@ -50,5 +51,8 @@ export const useMemoStore = create<MemoStoreState & MemoStoreAction>((set) => ({
     set((state) => ({
       data: state.data.filter((item) => item.id !== id),
     }));
+  },
+  setIsRefreshing: (isRefreshing) => {
+    set({ isRefreshing });
   },
 }));
