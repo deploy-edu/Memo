@@ -5,6 +5,7 @@ import { supabase } from "@/libs/supabase";
 import {
   addMemo,
   addPhotos,
+  deletePhotos,
   fetchPhotos,
   updateMemo,
 } from "@/libs/supabaseMemoApi";
@@ -68,6 +69,7 @@ const AddMemoScreen: FC<Props> = ({ navigation, route }) => {
         };
         const updatedMemo = await updateMemo(memo);
         useMemoStore.getState().updateMemo(updatedMemo);
+        await deletePhotos(updatedMemo.id);
         for (const photoKey of photoKeys) {
           await addPhotos(updatedMemo.id, photoKey);
         }
