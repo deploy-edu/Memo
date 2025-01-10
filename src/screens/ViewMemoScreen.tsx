@@ -1,6 +1,8 @@
-import { deleteMemo } from "@/libs/supabaseMemoApi";
+import Photo from "@/components/Photo";
+import { deleteMemo, fetchPhotos } from "@/libs/supabaseMemoApi";
 import styled from "@emotion/native";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import { useFocusEffect } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { FC, useCallback, useState } from "react";
 import { Alert } from "react-native";
@@ -38,6 +40,12 @@ const EditButton = styled.Pressable`
   justify-content: center;
 `;
 
+const PhotoContainer = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+`;
+
 type Props = StackScreenProps<RootStackParamList, "ViewMemo">;
 
 const ViewMemoScreen: FC<Props> = ({ navigation, route }) => {
@@ -45,6 +53,7 @@ const ViewMemoScreen: FC<Props> = ({ navigation, route }) => {
   const { keyboardHeight } = useKeyboardHeight();
   const [title, setTitle] = useState<string>(memoData?.title || "");
   const [content, setContent] = useState<string>(memoData?.content || "");
+  const [photoKeys, setphotoKeys] = useState<string[]>([]);
 
   const onDelete = useCallback(async () => {
     try {
@@ -64,6 +73,21 @@ const ViewMemoScreen: FC<Props> = ({ navigation, route }) => {
       data: memoData,
     });
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      async function init() {
+        try {
+          const photos = await fetchPhotos(memoData.id);
+          console.log("photos", photos);
+          setphotoKeys(photos);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      init();
+    }, [memoData.id])
+  );
 
   return (
     <RootLayoutContainer
@@ -91,6 +115,13 @@ const ViewMemoScreen: FC<Props> = ({ navigation, route }) => {
       <ContentContainer>
         <Content>{content}</Content>
       </ContentContainer>
+      {photoKeys.length > 0 && (
+        <PhotoContainer>
+          {photoKeys.map((photoKey) => (
+            <Photo key={photoKey} photoKey={photoKey} />
+          ))}
+        </PhotoContainer>
+      )}
       <Button title="삭제" onPress={onDelete} />
     </RootLayoutContainer>
   );

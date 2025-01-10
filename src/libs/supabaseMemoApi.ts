@@ -78,3 +78,30 @@ export const deleteMemo = async (id: number) => {
     throw new Error(error.message);
   }
 };
+
+export const fetchPhotos = async (memoId: number) => {
+  const { data, error } = await supabase
+    .from("Photo")
+    .select("image")
+    .eq("memo_id", memoId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data?.map((photo) => photo.image) || [];
+};
+
+export const addPhotos = async (memoId: number, path: string) => {
+  const { data, error } = await supabase
+    .from("Photo")
+    .insert([{ memo_id: memoId, image: path }])
+    .select("image")
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};
