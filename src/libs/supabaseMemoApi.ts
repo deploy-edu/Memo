@@ -105,3 +105,11 @@ export const addPhotos = async (memoId: number, path: string) => {
 
   return data;
 };
+
+export const deletePhotos = async (memoId: number) => {
+  const { error } = await supabase.from("Photo").delete().eq("memo_id", memoId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+};

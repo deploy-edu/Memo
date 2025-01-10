@@ -1,5 +1,5 @@
 import Photo from "@/components/Photo";
-import { deleteMemo, fetchPhotos } from "@/libs/supabaseMemoApi";
+import { deleteMemo, deletePhotos, fetchPhotos } from "@/libs/supabaseMemoApi";
 import styled from "@emotion/native";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { useFocusEffect } from "@react-navigation/native";
@@ -57,6 +57,7 @@ const ViewMemoScreen: FC<Props> = ({ navigation, route }) => {
 
   const onDelete = useCallback(async () => {
     try {
+      await deletePhotos(memoData.id);
       const memo = await deleteMemo(memoData.id);
       useMemoStore.getState().deleteMemo(memoData.id);
       Alert.alert("삭제되었습니다.");
